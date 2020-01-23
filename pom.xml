@@ -1,32 +1,93 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.mycompany.app</groupId>
-  <artifactId>my-app</artifactId>
-  <packaging>ear</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>my-app</name>
-  <url>https://repo.maven.apache.org/maven2</url>
+  <groupId>myMultiProjectGroupId.myMultiProjectArtifactId</groupId>
+  <artifactId>ejbModule</artifactId>
+  <packaging>ejb</packaging>
+  <version>1.0</version>
+  <name>myEJBModule1</name>
+  <url>http://maven.apache.org</url>
+ 
+  <!-- 2. Reference to parent project. -->
+    <parent>
+    <groupId>myMultiProjectGroupId</groupId>
+    <artifactId>myMultiProjectArtifactId</artifactId>
+    <version>myMultiProjectVersion</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+ 
+  <!-- 3. Dependencies on another libraries, projects etc. -->
   <dependencies>
+    <!-- 3.1. Specify dependencies on external libraries. -->
+    <!-- 3.2. Specify dependencies on EJB libraries. -->
+ 
+ 
+    <!-- 3.3. Specify dependencies on internal libraries. -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
+      <groupId>myMultiProjectGroupId.myMultiProjectArtifactId</groupId>
+      <artifactId>module1</artifactId>
+      <version>1.0</version>
+ 
+      <!-- 3.3.1. This library is required at runtime. -->
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
-       <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-ear-plugin</artifactId>
-            <version>3.0.2</version>
-            <configuration>
-              <artifactTypeMappings>
-                <artifactTypeMapping type="my-rar" mapping="rar"/>
-              </artifactTypeMappings>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
+ 
+  <!-- 4. Specify the content of generated artifact. -->
+  <build>
+ 
+    <!-- 4.1. Specify the final name of the artifact. -->
+    <finalName>ejbModule</finalName>
+ 
+    <defaultGoal>package</defaultGoal>
+ 
+    <!-- 4.2. Specify the location of sources (if you have non-standard location). -->
+    <!-- Defailt is: ${basedir}/src/main/java -->
+    <sourceDirectory>../../src/java</sourceDirectory>
+ 
+    <!-- 4.3. We don't want to filter for this module: "filters" section is empty. -->
+ 
+    <!-- 4.4. Specify the location of resources (for non-standard location). -->
+    <!-- Defailt is: ${basedir}/src/main/resources -->
+    <resources>
+      <resource>
+        <directory>../src/java/META-INF</directory>
+        <targetPath>META-INF</targetPath>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>*application*.xml</exclude>
+        </excludes>
+      </resource>
+    </resources>
+ 
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!-- 4.5. Specify used Java version. -->
+          <source>1.5</source>
+          <target>1.5</target>
+ 
+          <!-- 4.6. Specify files to include. -->
+          <includes>
+            <include>**/ejb/**</include>
+          </includes>
+ 
+          <!-- 4.7. Nothing to exclude. -->
+        </configuration>
+      </plugin>
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-ejb-plugin</artifactId>
+<configuration>
+<ejbVersion>3.0</ejbVersion>
+</configuration>
+</plugin>
+ 
+ 
+    </plugins>
+ 
+  </build>
+ 
 </project>
